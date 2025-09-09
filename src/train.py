@@ -55,27 +55,33 @@ class TranslationTrainer:
     
     def setup_training_arguments(self, output_dir: str = "models/nllb-finetuned-en-to-asm"):
         """
-        Configure training arguments
+        Configure training arguments optimized for small datasets
         """
         return TrainingArguments(
             output_dir=output_dir,
-            per_device_train_batch_size=4,
-            per_device_eval_batch_size=4,
-            gradient_accumulation_steps=2,
-            learning_rate=5e-5,
-            num_train_epochs=3,
-            warmup_steps=500,
-            logging_steps=100,
-            eval_steps=500,
-            save_steps=1000,
-            eval_strategy="steps",  # Changed from evaluation_strategy
+            per_device_train_batch_size=2,  # Reduced for stability with small dataset
+            per_device_eval_batch_size=2,
+            gradient_accumulation_steps=4,  # Increased to maintain effective batch size
+            learning_rate=3e-5,  # Slightly reduced learning rate for fine-tuning
+            num_train_epochs=5,  # More epochs for small dataset
+            warmup_steps=50,  # Reduced warmup for small dataset
+            logging_steps=10,  # More frequent logging
+            eval_steps=50,  # More frequent evaluation
+            save_steps=100,
+            eval_strategy="steps",
             save_strategy="steps",
             load_best_model_at_end=True,
             metric_for_best_model="eval_loss",
             greater_is_better=False,
             report_to=None,  # Disable wandb logging
             dataloader_pin_memory=False,
-            fp16=torch.cuda.is_available(),  # Use mixed precision if GPU available
+            fp16=torch.cuda.is_available(),
+            # Additional optimizations for small datasets
+            weight_decay=0.01,
+            adam_epsilon=1e-8,
+            max_grad_norm=1.0,
+            seed=42,  # For reproducibility
+            remove_unused_columns=False,
         )
     
     def train_model(self, dataset, output_dir: str = "models/nllb-finetuned-en-to-asm"):
