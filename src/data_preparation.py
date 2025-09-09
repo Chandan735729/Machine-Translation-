@@ -1,3 +1,4 @@
+
 """
 Data Preparation Pipeline for English-Assamese Translation
 Handles dataset loading, cleaning, and preprocessing for NLLB fine-tuning
@@ -26,19 +27,32 @@ class DataPreparator:
         self.source_lang = "eng_Latn"
         self.target_lang = "asm_Beng"
         
-    def load_dataset(self, dataset_name: str = "ai4bharat/PMIndia") -> DatasetDict:
+        # Set source and target languages for NLLB tokenizer
+        self.tokenizer.src_lang = self.source_lang
+        self.tokenizer.tgt_lang = self.target_lang
+        
+    def load_dataset(self, dataset_name: str = "ai4bharat/sangraha") -> DatasetDict:
         """
-        Load the PMIndia dataset for English-Assamese translation
+        Load the Sangraha dataset for English-Assamese translation
         """
         logger.info(f"Loading dataset: {dataset_name}")
         try:
-            dataset = load_dataset(dataset_name, "en-as")
+            # Try loading the sangraha dataset with English-Assamese pair
+            dataset = load_dataset(dataset_name, "eng-asm")
             logger.info(f"Dataset loaded successfully. Train size: {len(dataset['train'])}")
             return dataset
         except Exception as e:
-            logger.error(f"Error loading dataset: {e}")
-            # Fallback to creating a sample dataset
-            return self._create_sample_dataset()
+            logger.error(f"Error loading dataset with eng-asm: {e}")
+            try:
+                # Try alternative configuration
+                dataset = load_dataset(dataset_name, "en-as")
+                logger.info(f"Dataset loaded with en-as config. Train size: {len(dataset['train'])}")
+                return dataset
+            except Exception as e2:
+                logger.error(f"Error loading dataset with en-as: {e2}")
+                # Fallback to creating a sample dataset
+                logger.info("Falling back to sample dataset")
+                return self._create_sample_dataset()
     
     def _create_sample_dataset(self) -> DatasetDict:
         """
@@ -85,8 +99,27 @@ class DataPreparator:
         """
         Preprocess the data for NLLB model training
         """
-        inputs = [f"{self.source_lang}: {text}" for text in examples["en"]]
-        targets = [f"{self.target_lang}: {text}" for text in examples["as"]]
+        # Handle different possible column names from sangraha dataset
+        if "src" in examples and "tgt" in examples:
+            # Sangraha dataset format
+            source_texts = examples["src"]
+            target_texts = examples["tgt"]
+        elif "en" in examples and "as" in examples:
+            # Alternative format
+            source_texts = examples["en"]
+            target_texts = examples["as"]
+        elif "english" in examples and "assamese" in examples:
+            # Another possible format
+            source_texts = examples["english"]
+            target_texts = examples["assamese"]
+        else:
+            # Fallback - use first two columns
+            keys = list(examples.keys())
+            source_texts = examples[keys[0]]
+            target_texts = examples[keys[1]]
+        
+        inputs = [f"{self.source_lang}: {text}" for text in source_texts]
+        targets = [f"{self.target_lang}: {text}" for text in target_texts]
         
         model_inputs = self.tokenizer(
             inputs, 
@@ -95,14 +128,21 @@ class DataPreparator:
             padding=True
         )
         
-        # Setup the tokenizer for targets
-        with self.tokenizer.as_target_tokenizer():
-            labels = self.tokenizer(
-                targets, 
-                max_length=512, 
-                truncation=True, 
-                padding=True
-            )
+        # For NLLB tokenizer, we need to handle target tokenization differently
+        # Set the tokenizer to target mode and tokenize normally
+        original_tgt_lang = getattr(self.tokenizer, 'tgt_lang', None)
+        self.tokenizer.tgt_lang = self.target_lang
+        
+        labels = self.tokenizer(
+            targets,
+            max_length=512, 
+            truncation=True, 
+            padding=True
+        )
+        
+        # Restore original target language if it existed
+        if original_tgt_lang is not None:
+            self.tokenizer.tgt_lang = original_tgt_lang
         
         model_inputs["labels"] = labels["input_ids"]
         return model_inputs
