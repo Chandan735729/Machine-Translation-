@@ -102,7 +102,7 @@ Machine-Translation-/
 
 1. **Clone and Setup:**
    ```bash
-   git clone https://github.com/your-username/Machine-Translation-.git
+   git clone https://github.com/Chandan735729/Machine-Translation-.git
    cd Machine-Translation-
    python -m venv venv
    
