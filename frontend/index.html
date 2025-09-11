@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi-Modal Translation Platform</title>
+    <title>Multi-Language Translation Platform</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -59,26 +59,49 @@
             align-items: center;
             margin-bottom: 30px;
             gap: 20px;
+            flex-wrap: wrap;
         }
 
-        .language-box {
-            background: #f8f9fa;
+        .language-dropdown {
+            position: relative;
+            min-width: 200px;
+        }
+
+        .language-select {
+            width: 100%;
+            padding: 15px 20px;
             border: 2px solid #e9ecef;
             border-radius: 12px;
-            padding: 15px 25px;
-            text-align: center;
-            min-width: 120px;
+            font-size: 16px;
+            font-weight: 500;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
         }
 
-        .language-box.active {
-            background: #667eea;
-            color: white;
+        .language-select:focus {
+            outline: none;
             border-color: #667eea;
         }
 
-        .arrow {
-            font-size: 1.5rem;
-            color: #667eea;
+        .swap-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .swap-btn:hover {
+            background: #5a6fd8;
+            transform: rotate(180deg);
         }
 
         .input-section {
@@ -134,6 +157,7 @@
             justify-content: center;
             gap: 15px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
 
         .btn {
@@ -214,6 +238,19 @@
             display: block;
         }
 
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            display: none;
+        }
+
+        .success.show {
+            display: block;
+        }
+
         .features {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -253,6 +290,16 @@
             color: rgba(255, 255, 255, 0.8);
         }
 
+        .language-info {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #495057;
+        }
+
         @media (max-width: 768px) {
             .input-section {
                 grid-template-columns: 1fr;
@@ -260,7 +307,7 @@
             
             .language-selector {
                 flex-direction: column;
-                gap: 10px;
+                gap: 15px;
             }
             
             .controls {
@@ -270,40 +317,61 @@
             .header h1 {
                 font-size: 2rem;
             }
+
+            .language-dropdown {
+                min-width: 250px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1><i class="fas fa-language"></i> Multi-Modal Translation Platform</h1>
-            <p>Breaking down language barriers for NGOs and communities across India. Empowering communication in regional languages.</p>
+            <h1><i class="fas fa-language"></i> Multi-Language Translation Platform</h1>
+            <p>Breaking down language barriers with support for English, Assamese, Bengali, Manipuri, and Santali. Bidirectional translation for better communication.</p>
         </div>
 
         <div class="translation-card">
+            <div class="language-info">
+                <i class="fas fa-info-circle"></i>
+                <strong>Supported Languages:</strong> English, Assamese (অসমীয়া), Bengali (বাংলা), Manipuri (ꯃꯅꯤꯄꯨꯔꯤ), Santali (ᱥᱟᱱᱛᱟᱲᱤ)
+            </div>
+
             <div class="language-selector">
-                <div class="language-box active">
-                    <div><i class="fas fa-flag-usa"></i></div>
-                    <div>English</div>
+                <div class="language-dropdown">
+                    <select id="sourceLanguage" class="language-select">
+                        <option value="en">🇺🇸 English</option>
+                        <option value="as">🇮🇳 Assamese (অসমীয়া)</option>
+                        <option value="bn">🇮🇳 Bengali (বাংলা)</option>
+                        <option value="mni">🇮🇳 Manipuri (ꯃꯅꯤꯄꯨꯔꯤ)</option>
+                        <option value="sat">🇮🇳 Santali (ᱥᱟᱱᱛᱟᱲᱤ)</option>
+                    </select>
                 </div>
-                <div class="arrow">
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-                <div class="language-box active">
-                    <div><i class="fas fa-flag"></i></div>
-                    <div>অসমীয়া (Assamese)</div>
+                
+                <button id="swapBtn" class="swap-btn" title="Swap Languages">
+                    <i class="fas fa-exchange-alt"></i>
+                </button>
+                
+                <div class="language-dropdown">
+                    <select id="targetLanguage" class="language-select">
+                        <option value="as">🇮🇳 Assamese (অসমীয়া)</option>
+                        <option value="en">🇺🇸 English</option>
+                        <option value="bn">🇮🇳 Bengali (বাংলা)</option>
+                        <option value="mni">🇮🇳 Manipuri (ꯃꯅꯤꯄꯨꯔꯤ)</option>
+                        <option value="sat">🇮🇳 Santali (ᱥᱟᱱᱛᱟᱲᱤ)</option>
+                    </select>
                 </div>
             </div>
 
             <div class="input-section">
                 <div class="input-group">
                     <label class="input-label" for="sourceText">
-                        <i class="fas fa-edit"></i> Enter English Text
+                        <i class="fas fa-edit"></i> <span id="sourceLabel">Enter English Text</span>
                     </label>
                     <textarea 
                         id="sourceText" 
                         class="text-input" 
-                        placeholder="Type your English text here... For example: 'Community health workers are the backbone of our medical system.'"
+                        placeholder="Type your text here..."
                         maxlength="1000"
                     ></textarea>
                     <div class="char-counter">
@@ -313,7 +381,7 @@
 
                 <div class="input-group">
                     <label class="input-label" for="targetText">
-                        <i class="fas fa-language"></i> Assamese Translation
+                        <i class="fas fa-language"></i> <span id="targetLabel">Assamese Translation</span>
                     </label>
                     <textarea 
                         id="targetText" 
@@ -328,6 +396,10 @@
                 <button id="translateBtn" class="btn btn-primary">
                     <i class="fas fa-exchange-alt"></i>
                     Translate
+                </button>
+                <button id="detectBtn" class="btn btn-secondary">
+                    <i class="fas fa-search"></i>
+                    Detect Language
                 </button>
                 <button id="clearBtn" class="btn btn-secondary">
                     <i class="fas fa-eraser"></i>
@@ -344,6 +416,11 @@
                 <p>Translating your text...</p>
             </div>
 
+            <div id="success" class="success">
+                <i class="fas fa-check-circle"></i>
+                <span id="successMessage">Translation completed successfully!</span>
+            </div>
+
             <div id="error" class="error">
                 <i class="fas fa-exclamation-triangle"></i>
                 <span id="errorMessage">An error occurred during translation.</span>
@@ -353,11 +430,21 @@
         <div class="features">
             <div class="feature-card">
                 <div class="feature-icon">
-                    <i class="fas fa-heart"></i>
+                    <i class="fas fa-globe-asia"></i>
                 </div>
-                <div class="feature-title">For NGOs & Communities</div>
+                <div class="feature-title">Multi-Language Support</div>
                 <div class="feature-desc">
-                    Designed specifically to help NGOs share health awareness, educational materials, and public announcements in local languages.
+                    Supports 5 languages including English and 4 regional/tribal languages: Assamese, Bengali, Manipuri, and Santali.
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <div class="feature-title">Bidirectional Translation</div>
+                <div class="feature-desc">
+                    Translate from any supported language to any other supported language. Perfect for cross-cultural communication.
                 </div>
             </div>
 
@@ -367,27 +454,17 @@
                 </div>
                 <div class="feature-title">AI-Powered Translation</div>
                 <div class="feature-desc">
-                    Uses Meta's advanced NLLB model, fine-tuned specifically for English-Assamese translation to ensure high accuracy.
+                    Uses Meta's advanced NLLB pre-trained model with 600M parameters for high-quality translations without requiring local training.
                 </div>
             </div>
 
             <div class="feature-card">
                 <div class="feature-icon">
-                    <i class="fas fa-globe"></i>
+                    <i class="fas fa-heart"></i>
                 </div>
-                <div class="feature-title">Preserving Languages</div>
+                <div class="feature-title">For Communities</div>
                 <div class="feature-desc">
-                    Supporting low-resource languages like Assamese to promote regional linguistic diversity and cultural preservation.
-                </div>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-code"></i>
-                </div>
-                <div class="feature-title">Open Source</div>
-                <div class="feature-desc">
-                    Fully open-source project on GitHub, allowing developers and researchers to contribute and build upon our work.
+                    Designed to help NGOs, communities, and organizations communicate effectively across language barriers in India.
                 </div>
             </div>
         </div>
@@ -396,7 +473,7 @@
             <p>
                 <i class="fas fa-code"></i> Built with ❤️ for breaking language barriers | 
                 <a href="/docs" style="color: #ffd700;">API Documentation</a> | 
-                <a href="https://github.com" style="color: #ffd700;">GitHub</a>
+                <a href="/api/languages" style="color: #ffd700;">Supported Languages</a>
             </p>
         </div>
     </div>

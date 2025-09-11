@@ -1,12 +1,12 @@
-# 🌐 Multi-Modal Translation Platform: English to Assamese (অসমীয়া)
+# 🌐 Multi-Language Translation Platform: Breaking Language Barriers
 
-An open-source, scalable translation platform designed to break down language barriers for NGOs and organizations in India. This project creates a comprehensive ecosystem including data preparation, model training, web APIs, and user interfaces for English-Assamese translation using Meta's powerful NLLB model.
+An open-source, scalable translation platform designed to break down language barriers for NGOs and organizations in India. This project creates a comprehensive ecosystem including pre-trained model integration, web APIs, and user interfaces for **5 languages**: English, Assamese, Bengali, Manipuri, and Santali using Meta's powerful NLLB model.
 
 ## 🎯 Project Vision
 
 Our mission extends beyond simple translation:
 - **Bridge Communication Gaps**: Empower NGOs to share health awareness, educational materials, and public announcements in regional languages
-- **Preserve Low-Resource Languages**: Support languages like Assamese, Bodo, and others to promote linguistic diversity
+- **Preserve Low-Resource Languages**: Support languages like Assamese, Bengali, Manipuri, and Santali to promote linguistic diversity
 - **Create Multi-Modal Access**: Enable text, voice, and mobile access to translation services
 - **Build Open-Source Impact**: Provide a foundation for researchers and developers to expand language support
 
@@ -14,13 +14,32 @@ Our mission extends beyond simple translation:
 
 ## ✨ Key Features
 
-* **🤖 AI-Powered Translation**: Fine-tuned NLLB model specifically optimized for English-Assamese translation
+* **🤖 AI-Powered Translation**: Uses Meta's NLLB-200 pre-trained model for high-quality translations
+* **🌐 5-Language Support**: English, Assamese (অসমীয়া), Bengali (বাংলা), Manipuri (ꯃꯅꯤꯄꯨꯔꯤ), Santali (ᱥᱟᱱᱛᱟᱲᱤ)
+* **🔄 Bidirectional Translation**: Translate between any supported language pair
 * **🌐 Web API**: RESTful FastAPI backend with comprehensive endpoints for integration
 * **💻 Modern Web Interface**: Beautiful, responsive frontend with real-time translation
 * **📱 Mobile-Ready**: Architecture designed for future Flutter mobile app integration
-* **☁️ Cloud Training**: Google Colab notebook for GPU-accelerated model training
+* **🚀 No Training Required**: Uses pre-trained models - ready to use out of the box
 * **🔧 Production-Ready**: Complete deployment pipeline with health checks and error handling
 * **📊 Extensible**: Modular design for easy addition of new language pairs
+
+-----
+
+## 🗣️ Supported Languages
+
+| Language | Code | Script | NLLB Code | Support Level |
+|----------|------|--------|-----------|---------------|
+| English | `en` | Latin | `eng_Latn` | ⭐⭐⭐ Excellent |
+| Assamese | `as` | Bengali | `asm_Beng` | ⭐⭐⭐ Strong |
+| Bengali | `bn` | Bengali | `ben_Beng` | ⭐⭐⭐ Excellent |
+| Manipuri | `mni` | Bengali/Meetei | `mni_Beng` | ⭐⭐ Good (via Assamese) |
+| Santali | `sat` | Ol Chiki | `sat_Olck` | ⭐⭐ Good (via Assamese) |
+
+**Translation Strategy:**
+- Direct translation for English ↔ Assamese, English ↔ Bengali
+- Two-step translation for Manipuri/Santali (via Assamese for better quality)
+- Cross-language translation between all 5 languages supported
 
 -----
 
@@ -30,7 +49,7 @@ Our mission extends beyond simple translation:
 * Python 3.9+
 * PyTorch 2.0+
 * Hugging Face Transformers
-* Meta's NLLB-200 Model
+* Meta's NLLB-200-distilled-600M Model
 
 **Backend & API:**
 * FastAPI
@@ -42,10 +61,10 @@ Our mission extends beyond simple translation:
 * Responsive design with CSS Grid/Flexbox
 * Font Awesome icons
 
-**Training & Development:**
-* Google Colab for GPU training
-* Jupyter notebooks
-* Git version control
+**No Training Required:**
+* Uses pre-trained NLLB model
+* No GPU/CUDA requirements
+* Ready to use immediately
 
 -----
 
@@ -54,20 +73,18 @@ Our mission extends beyond simple translation:
 ```
 Machine-Translation-/
 ├── 📁 src/                     # Core Python modules
-│   ├── data_preparation.py     # Dataset loading and preprocessing
-│   ├── train.py               # Model fine-tuning script
-│   └── translate.py           # Translation inference engine
+│   ├── data_preparation.py     # Dataset loading and preprocessing (legacy)
+│   ├── train.py               # Model training script (legacy)
+│   └── translate.py           # Multi-language translation engine
 ├── 📁 api/                     # FastAPI backend
 │   └── main.py                # REST API server with endpoints
 ├── 📁 frontend/                # Web interface
 │   ├── index.html             # Main web application
 │   └── script.js              # Frontend JavaScript logic
-├── 📁 notebooks/               # Training notebooks
+├── 📁 notebooks/               # Training notebooks (legacy)
 │   └── train_colab.ipynb      # Google Colab training notebook
-├── 📁 data/                    # Dataset storage (created during setup)
-├── 📁 models/                  # Trained model storage (created during training)
-├── 📁 results/                 # Training results and logs
 ├── requirements.txt            # Python dependencies
+├── run_server.py              # Simple server runner
 └── README.md                   # This file
 ```
 
@@ -75,7 +92,13 @@ Machine-Translation-/
 
 ## 🚀 Quick Start Guide
 
-### Option 1: Web Application (Recommended for Testing)
+### Prerequisites
+
+* **Python 3.9+**
+* **Git**
+* **Internet connection** (for downloading pre-trained models)
+
+### Installation & Setup
 
 1. **Clone and Setup:**
    ```bash
@@ -91,27 +114,15 @@ Machine-Translation-/
    pip install -r requirements.txt
    ```
 
-2. **Run the Web Application:**
+2. **Run the Application:**
    ```bash
-   python api/main.py
+   python run_server.py
    ```
    
 3. **Access the Interface:**
    Open your browser and go to `http://localhost:8000`
 
-### Option 2: Google Colab Training (For Model Development)
-
-1. **Open the Colab notebook:** `notebooks/train_colab.ipynb`
-2. **Set Runtime to GPU:** Runtime → Change runtime type → GPU
-3. **Run all cells** to train your custom model
-4. **Download the trained model** and place it in your local `models/` directory
-
-### Prerequisites
-
-* **Python 3.9+**
-* **Git**
-* **NVIDIA GPU with CUDA** (only for local training)
-* **Google Colab account** (for cloud training)
+**That's it!** The first run will automatically download the pre-trained NLLB model (~2.4GB). No training or GPU required.
 
 -----
 
@@ -121,11 +132,12 @@ Machine-Translation-/
 
 The easiest way to use the translation platform:
 
-1. **Start the server:** `python api/main.py`
+1. **Start the server:** `python run_server.py`
 2. **Open your browser:** Navigate to `http://localhost:8000`
-3. **Enter English text** in the left panel
-4. **Click "Translate"** to get Assamese translation
-5. **Copy or use** the translated text
+3. **Select languages** from the dropdown menus
+4. **Enter text** in the source language panel
+5. **Click "Translate"** to get translation in target language
+6. **Use language detection** for automatic source language identification
 
 ### 🔧 API Integration
 
@@ -136,48 +148,45 @@ import requests
 
 # Single translation
 response = requests.post("http://localhost:8000/api/translate", 
-    json={"text": "Hello, how are you?"})
+    json={
+        "text": "Hello, how are you?",
+        "source_language": "en",
+        "target_language": "as"
+    })
 result = response.json()
 print(result["translated_text"])
 
 # Batch translation
 response = requests.post("http://localhost:8000/api/translate/batch",
-    json={"texts": ["Hello", "Thank you", "Good morning"]})
+    json={
+        "texts": ["Hello", "Thank you", "Good morning"],
+        "source_language": "en",
+        "target_language": "bn"
+    })
 results = response.json()
+
+# Language detection
+response = requests.post("http://localhost:8000/api/detect",
+    json={"text": "আপনি কেমন আছেন?"})
+detected = response.json()
+print(f"Detected: {detected['detected_language']}")
 ```
-
-### 🤖 Model Training Pipeline
-
-**For Local Training:**
-```bash
-# 1. Prepare data
-python src/data_preparation.py
-
-# 2. Train model (requires GPU)
-python src/train.py
-
-# 3. Test translations
-python src/translate.py
-```
-
-**For Google Colab Training:**
-1. Upload `notebooks/train_colab.ipynb` to Google Colab
-2. Set runtime to GPU (T4 recommended)
-3. Run all cells in sequence
-4. Download the trained model
 
 ### 📱 API Endpoints
 
 - `GET /` - Web interface
 - `POST /api/translate` - Single text translation
 - `POST /api/translate/batch` - Batch translation
+- `POST /api/detect` - Language detection
 - `GET /api/languages` - Supported language pairs
 - `GET /health` - Service health check
 - `GET /docs` - Interactive API documentation
 
-**Example Translation:**
-* **Input:** `"Community health workers are the backbone of our medical system."`
-* **Output:** `"সামূহিক স্বাস্থ্য কৰ্মীসকল আমাৰ চিকিৎসা ব্যৱস্থাৰ মেৰুদণ্ড।"`
+**Example Translations:**
+* **English → Assamese:** `"Hello"` → `"নমস্কাৰ"`
+* **English → Bengali:** `"Thank you"` → `"ধন্যবাদ"`
+* **English → Manipuri:** `"Good morning"` → `"নুংঙাইরবা"`
+* **English → Santali:** `"Welcome"` → `"ᱡᱚᱦᱟᱨ"`
 
 -----
 
@@ -187,44 +196,42 @@ python src/translate.py
 * **Base Model:** Meta's `facebook/nllb-200-distilled-600M`
 * **Parameters:** 600M parameters, optimized for multilingual translation
 * **Languages Supported:** 200+ languages with focus on low-resource languages
-* **Fine-tuning:** Specialized English-Assamese training
+* **No Fine-tuning Required:** Uses pre-trained weights directly
 
 ### Language Specifications
-* **Source Language:** English (`eng_Latn`)
-* **Target Language:** Assamese (`asm_Beng`) - Bengali script
-* **Script Support:** Devanagari and Bengali scripts for regional languages
-
-### Dataset Information
-* **Primary Dataset:** `ai4bharat/PMIndia` - Parallel corpus for Indian languages
-* **Backup Dataset:** Custom curated English-Assamese sentence pairs
-* **Domain Focus:** Health, education, and public awareness content
-* **Quality Assurance:** Cleaned and preprocessed for optimal training
+* **Supported Scripts:** Latin, Bengali, Ol Chiki, Meetei Mayek
+* **Language Detection:** Automatic script-based detection with fallbacks
+* **Quality Optimization:** Two-step translation for challenging language pairs
 
 ### Performance Metrics
-* **Training Time:** ~30-60 minutes on Google Colab T4 GPU
-* **Model Size:** ~2.4GB (compressed)
-* **Inference Speed:** ~1-2 seconds per sentence
+* **Setup Time:** ~5-10 minutes (model download)
+* **Model Size:** ~2.4GB (downloaded once)
+* **Inference Speed:** ~1-3 seconds per sentence
 * **Supported Text Length:** Up to 512 tokens per translation
+* **Memory Usage:** ~4-6GB RAM recommended
 
 -----
 
 ## 🚀 Future Roadmap
 
 ### Phase 1: Core Platform (✅ Complete)
-- [x] English-Assamese translation model
+- [x] 5-language translation support
 - [x] FastAPI backend with REST endpoints
 - [x] Modern web interface
-- [x] Google Colab training pipeline
+- [x] Pre-trained model integration
+- [x] Language detection
+- [x] Bidirectional translation
 
-### Phase 2: Multi-Language Expansion
-- [ ] Add Bodo (brx_Deva) support
-- [ ] Add Dogri (dgo_Deva) support
-- [ ] Add Hindi (hin_Deva) support
-- [ ] Language selection dropdown
+### Phase 2: Enhanced Features
+- [ ] Voice input/output integration
+- [ ] Document translation (PDF, DOCX)
+- [ ] Translation confidence scores
+- [ ] Translation history and favorites
+- [ ] Offline mode support
 
 ### Phase 3: Multi-Modal Features
-- [ ] Text-to-Speech (TTS) for Assamese output
-- [ ] Speech-to-Text (ASR) for English input
+- [ ] Text-to-Speech (TTS) for all languages
+- [ ] Speech-to-Text (ASR) for voice input
 - [ ] Audio file upload and translation
 - [ ] Voice conversation mode
 
@@ -233,6 +240,7 @@ python src/translate.py
 - [ ] Progressive Web App (PWA)
 - [ ] Cloud deployment (Hugging Face Spaces)
 - [ ] Docker containerization
+- [ ] API rate limiting and authentication
 
 ## 🤝 Contributing
 
@@ -259,10 +267,9 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 * **Meta AI** - For the groundbreaking NLLB models
 * **Hugging Face** - For the incredible transformers library and model hub
-* **AI4Bharat** - For the PMIndia dataset and Indian language research
 * **FastAPI** - For the modern, fast web framework
-* **Google Colab** - For providing free GPU access for training
-* **NGO Community** - For inspiring this project's mission
+* **Regional Language Communities** - For inspiring this project's mission
+* **Open Source Community** - For tools and libraries that made this possible
 
 ---
 
@@ -270,6 +277,8 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 **🌐 Breaking Language Barriers, One Translation at a Time 🌐**
 
-[🚀 Get Started](#-quick-start-guide) • [📖 Documentation](#-usage-guide) • [🤝 Contribute](#-contributing) • [📱 Mobile App](#-future-roadmap)
+**Supported Languages:** English • অসমীয়া • বাংলা • ꯃꯅꯤꯄꯨꯔꯤ • ᱥᱟᱱᱛᱟᱲᱤ
+
+[🚀 Get Started](#-quick-start-guide) • [📖 Documentation](#-usage-guide) • [🤝 Contribute](#-contributing) • [📱 API Docs](http://localhost:8000/docs)
 
 </div>

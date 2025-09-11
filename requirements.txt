@@ -1,30 +1,30 @@
-# Core ML and NLP libraries
+# Core ML and NLP libraries for inference only
 torch>=2.0.0
-transformers>=4.30.0
-datasets>=2.12.0
-accelerate>=0.20.0
+transformers>=4.35.0
 sentencepiece>=0.1.99
 protobuf>=3.20.0
+tokenizers>=0.14.0
 
-# API and web framework
-fastapi>=0.100.0
-uvicorn[standard]>=0.22.0
-pydantic>=2.0.0
+# API and web framework (Python 3.13 compatible versions)
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.5.0
+starlette>=0.27.0
 
-# Data processing
-pandas>=2.0.0
+# Data processing (lightweight)
 numpy>=1.24.0
 
-# Utilities
+# HTTP requests for external APIs
 requests>=2.31.0
-tqdm>=4.65.0
+
+# Utilities
 python-multipart>=0.0.6
+jinja2>=3.1.2
+
+# Optional language detection (lightweight alternative)
+langdetect>=1.0.9
 
 # Development and testing (optional)
 pytest>=7.4.0
 black>=23.0.0
 flake8>=6.0.0
-
-# For Google Colab compatibility
-ipywidgets>=8.0.0
-jupyter>=1.0.0
