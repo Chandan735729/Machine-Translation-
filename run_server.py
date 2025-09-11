@@ -1,5 +1,6 @@
 """
-Simple server runner script for the Multi-Modal Translation Platform
+Simple server runner script for the Multi-Language Translation Platform
+Supports English, Assamese, Bengali, Manipuri, and Santali
 """
 
 import sys
@@ -16,7 +17,8 @@ def main():
     # Change to the project directory
     os.chdir(current_dir)
     
-    print("🌐 Starting Multi-Modal Translation Platform...")
+    print("🌐 Starting Multi-Language Translation Platform...")
+    print("🗣️  Supported Languages: English, Assamese, Bengali, Manipuri, Santali")
     print("📍 Server will be available at: http://localhost:8000")
     print("📚 API Documentation: http://localhost:8000/docs")
     print("🛑 Press Ctrl+C to stop the server")
