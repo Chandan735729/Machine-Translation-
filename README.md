@@ -28,18 +28,20 @@ Our mission extends beyond simple translation:
 
 ## 🗣️ Supported Languages
 
-| Language | Code | Script | NLLB Code | Support Level |
-|----------|------|--------|-----------|---------------|
-| English | `en` | Latin | `eng_Latn` | ⭐⭐⭐ Excellent |
-| Assamese | `as` | Bengali | `asm_Beng` | ⭐⭐⭐ Strong |
-| Bengali | `bn` | Bengali | `ben_Beng` | ⭐⭐⭐ Excellent |
-| Manipuri | `mni` | Bengali/Meetei | `mni_Beng` | ⭐⭐ Good (via Assamese) |
-| Santali | `sat` | Ol Chiki | `sat_Olck` | ⭐⭐ Good (via Assamese) |
+| Language | Code | Script | NLLB Code | Support Level | Notes |
+|----------|------|--------|-----------|---------------|-------|
+| English | `en` | Latin | `eng_Latn` | ⭐⭐⭐ Excellent | Full support |
+| Assamese | `as` | Bengali | `asm_Beng` | ⭐⭐⭐ Strong | Full support |
+| Bengali | `bn` | Bengali | `ben_Beng` | ⭐⭐⭐ Excellent | Full support |
+| Manipuri | `mni` | Bengali/Meetei | `mni_Beng` | ⭐⭐ Good | Two-step via Assamese |
+| Santali | `sat` | Ol Chiki | `sat_Olck` | ⭐ Limited | NLLB model has minimal Santali support |
 
 **Translation Strategy:**
-- Direct translation for English ↔ Assamese, English ↔ Bengali
-- Two-step translation for Manipuri/Santali (via Assamese for better quality)
-- Cross-language translation between all 5 languages supported
+- **Direct translation**: English ↔ Assamese, English ↔ Bengali, Assamese ↔ Bengali
+- **Two-step translation**: Manipuri/Santali translations use Assamese as intermediate language
+- **Limitations**: Santali has very limited support in NLLB model - may return original text for complex sentences
+- **Fallback system**: Automatic fallback to Hindi for extremely difficult translations
+- **Cross-language translation**: All language pairs supported with varying quality
 
 -----
 
@@ -73,16 +75,12 @@ Our mission extends beyond simple translation:
 ```
 Machine-Translation-/
 ├── 📁 src/                     # Core Python modules
-│   ├── data_preparation.py     # Dataset loading and preprocessing (legacy)
-│   ├── train.py               # Model training script (legacy)
 │   └── translate.py           # Multi-language translation engine
 ├── 📁 api/                     # FastAPI backend
 │   └── main.py                # REST API server with endpoints
 ├── 📁 frontend/                # Web interface
 │   ├── index.html             # Main web application
 │   └── script.js              # Frontend JavaScript logic
-├── 📁 notebooks/               # Training notebooks (legacy)
-│   └── train_colab.ipynb      # Google Colab training notebook
 ├── requirements.txt            # Python dependencies
 ├── run_server.py              # Simple server runner
 └── README.md                   # This file

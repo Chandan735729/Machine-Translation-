@@ -30,7 +30,8 @@ class MultiLanguageTranslator:
             "as": "asm_Beng",      # Assamese
             "bn": "ben_Beng",      # Bengali
             "mni": "mni_Beng",     # Manipuri/Meitei
-            "sat": "sat_Olck"      # Santali
+            "sat": "sat_Olck",     # Santali
+            "hi": "hin_Deva"       # Hindi (fallback language for difficult translations)
         }
         
         # Alternative mappings to try if primary fails (only for well-supported languages)
@@ -156,10 +157,11 @@ class MultiLanguageTranslator:
     
     def validate_language_pair(self, source_lang: str, target_lang: str) -> bool:
         """
-        Validate if the language pair is supported
+        Validate if the language pair is supported (excludes internal fallback languages)
         """
-        return (source_lang in self.language_codes and 
-                target_lang in self.language_codes and 
+        user_languages = ["en", "as", "bn", "mni", "sat"]  # Exclude internal fallback languages
+        return (source_lang in user_languages and 
+                target_lang in user_languages and 
                 source_lang != target_lang)
     
     def translate(self, text: str, source_lang: str, target_lang: str, max_length: int = 512) -> str:
@@ -192,9 +194,25 @@ class MultiLanguageTranslator:
                 else:
                     assamese_text = text
                 
-                # Step 2: Force translation from Assamese to target using Assamese token
-                # This ensures we get actual translation, not copy
-                final_translation = self._force_translate_from_assamese(assamese_text, target_lang, max_length)
+                # Step 2: Try direct translation first, if fails or returns same text, try alternatives
+                try:
+                    final_translation = self._direct_translate(assamese_text, "as", target_lang, max_length)
+                    
+                    # If translation is same as input or empty, try force translate
+                    if final_translation == assamese_text or not final_translation.strip():
+                        final_translation = self._force_translate_from_assamese(assamese_text, target_lang, max_length)
+                    
+                    # If still same, try via Hindi as fallback
+                    if final_translation == assamese_text or not final_translation.strip():
+                        hindi_text = self._direct_translate(text, source_lang, "hi", max_length) if source_lang != "hi" else text
+                        final_translation = self._direct_translate(hindi_text, "hi", target_lang, max_length)
+                        quality_note = f" [Translated via Hindi - {self.language_names[target_lang]} has very limited direct support]"
+                        return final_translation + quality_note
+                    
+                except Exception as e:
+                    logger.error(f"Two-step translation failed: {e}")
+                    # Fallback to direct translation
+                    final_translation = self._direct_translate(text, source_lang, target_lang, max_length)
                 
                 # Add notification
                 quality_note = f" [Translated via Assamese - {self.language_names[target_lang]} has limited direct support]"
