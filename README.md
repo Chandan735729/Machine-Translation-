@@ -212,35 +212,7 @@ print(f"Detected: {detected['detected_language']}")
 
 -----
 
-## 🚀 Future Roadmap
 
-### Phase 1: Core Platform (✅ Complete)
-- [x] 5-language translation support
-- [x] FastAPI backend with REST endpoints
-- [x] Modern web interface
-- [x] Pre-trained model integration
-- [x] Language detection
-- [x] Bidirectional translation
-
-### Phase 2: Enhanced Features
-- [ ] Voice input/output integration
-- [ ] Document translation (PDF, DOCX)
-- [ ] Translation confidence scores
-- [ ] Translation history and favorites
-- [ ] Offline mode support
-
-### Phase 3: Multi-Modal Features
-- [ ] Text-to-Speech (TTS) for all languages
-- [ ] Speech-to-Text (ASR) for voice input
-- [ ] Audio file upload and translation
-- [ ] Voice conversation mode
-
-### Phase 4: Mobile & Deployment
-- [ ] Flutter mobile application
-- [ ] Progressive Web App (PWA)
-- [ ] Cloud deployment (Hugging Face Spaces)
-- [ ] Docker containerization
-- [ ] API rate limiting and authentication
 
 ## 🤝 Contributing
 
